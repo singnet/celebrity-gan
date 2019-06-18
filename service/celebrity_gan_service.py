@@ -28,7 +28,7 @@ class GenerateCelebrityServicer(grpc_bt_grpc.GenerateCelebrityServicer):
 
     def __init__(self):
         log.debug("GenerateCelebrityServicer created!")
-        self.model_path = '/opt/singnet/celebrity-gan/service/karras2018iclr-celebahq-1024x1024.pkl'
+        self.model_path = '/opt/singnet/celebrity-gan/service/Gs.pkl'
         self.result = Image()
 
     def generate_celebrity(self, request, context):
@@ -55,7 +55,7 @@ class GenerateCelebrityServicer(grpc_bt_grpc.GenerateCelebrityServicer):
         # Import official CelebA-HQ networks.
         with open(self.model_path, 'rb') as file:
             session = tf.InteractiveSession()
-            G, D, Gs = pickle.load(file)
+            Gs = pickle.load(file)
             # Generate latent vectors.
             latents = np.random.RandomState(random_seed).randn(1, *Gs.input_shapes[0][1:])  # 1000 random latents
             # Generate dummy labels (not used by the official networks).
