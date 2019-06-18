@@ -15,7 +15,7 @@
 
 This service uses convolutional neural networks to generate an imaginary celebrity using a random seed.
 
-This repository was forked from [tkarras/progressive_growing_of_gans](https://github.com/tkarras/progressive_growing_of_gans). The original code and its integration into the SingularityNET both use Python 3.
+This repository was forked from [tkarras/progressive_growing_of_gans](https://github.com/tkarras/progressive_growing_of_gans). The original code and its integration into the SingularityNET both use Python 3. **This repository uses [GIT LFS](https://git-lfs.github.com/) to store the weights of the pre-trained neural network. Make sure to install it before cloning the repository.**
 
 Refer to:
 - [The User's Guide](https://singnet.github.io/celebrity-gan-service/): for information about how to use this code as a SingularityNET service;
