@@ -9,16 +9,16 @@
 
 > Repository for the celebrity gan service on the SingularityNET.
 
-[![Github Issues](http://githubbadges.herokuapp.com/singnet/celebrity-gan-service/issues.svg?style=flat-square)](https://github.com/singnet/celebrity-gan-service/issues/) 
-[![Pending Pull-Requests](http://githubbadges.herokuapp.com/singnet/celebrity-gan-service/pulls.svg?style=flat-square)](https://github.com/singnet/celebrity-gan-service/pulls) 
-[![CircleCI](https://circleci.com/gh/singnet/celebrity-gan-service.svg?style=svg)](https://circleci.com/gh/singnet/celebrity-gan-service)
+[![Github Issues](http://githubbadges.herokuapp.com/singnet/celebrity-gan/issues.svg?style=flat-square)](https://github.com/singnet/celebrity-gan/issues/) 
+[![Pending Pull-Requests](http://githubbadges.herokuapp.com/singnet/celebrity-gan/pulls.svg?style=flat-square)](https://github.com/singnet/celebrity-gan/pulls) 
+[![CircleCI](https://circleci.com/gh/singnet/celebrity-gan.svg?style=svg)](https://circleci.com/gh/singnet/celebrity-gan)
 
 This service uses convolutional neural networks to generate an imaginary celebrity using a random seed.
 
 This repository was forked from [tkarras/progressive_growing_of_gans](https://github.com/tkarras/progressive_growing_of_gans). The original code and its integration into the SingularityNET both use Python 3.
 
 Refer to:
-- [The User's Guide](https://singnet.github.io/celebrity-gan-service/): for information about how to use this code as a SingularityNET service;
+- [The User's Guide](https://singnet.github.io/celebrity-gan/): for information about how to use this code as a SingularityNET service;
 - [The Original Repository](https://github.com/tkarras/progressive_growing_of_gans): for up-to-date information on [tkarras](https://github.com/tkarras)'s implementation of this code.
 - [SingularityNET's Dev Portal](https://dev.singularitynet.io/): for information and tutorials on how to use the SingularityNET and its services.
 
