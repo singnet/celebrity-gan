@@ -24,16 +24,6 @@ RUN SNETD_VERSION=`curl -s https://api.github.com/repos/singnet/snet-daemon/rele
     tar -xvf snet-daemon-${SNETD_VERSION}-linux-amd64.tar.gz && \
     mv snet-daemon-${SNETD_VERSION}-linux-amd64/snetd /usr/bin/snetd
 
-# Installing Git LFS so that the model is downloaded properly
-RUN cd /opt && \
-    wget https://github.com/git-lfs/git-lfs/releases/download/v2.7.2/git-lfs-linux-amd64-v2.7.2.tar.gz && \
-    mkdir git-lfs && \
-    mv ./git-lfs-linux-amd64-v2.7.2.tar.gz git-lfs/ && \
-    cd git-lfs && \
-    tar -xvzf git-lfs-linux-amd64-v2.7.2.tar.gz && \
-    ./install.sh && \
-    git lfs install
-
 # Cloning service repository and downloading models
 RUN mkdir -p ${SINGNET_REPOS} && \
     cd ${SINGNET_REPOS} &&\
