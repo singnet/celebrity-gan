@@ -1,26 +1,51 @@
-FROM nvidia/cuda:10.0-cudnn7-runtime-ubuntu16.04
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 
-RUN apt update && \
-    apt install -y wget curl nano git python3-dev python3-pip && \
-    cd ~ && \
-    git clone https://github.com/tkarras/progressive_growing_of_gans.git && \
-    cd progressive_growing_of_gans &&\
-    pip3 install --upgrade pip && \
-    pip install -r requirements-pip.txt && \
-    pip install tensorflow-gpu==1.12.0 && \
-    wget https://raw.githubusercontent.com/singnet/semantic-segmentation-aerial/master/service/download_models.py && \
-    chmod +x download_models.py && \
-    ./download_models.py --filepath ./import_example.py --google_file_id 1xZul7DwqqJoe5OCuKHw6fQVeQZNIMSuF && \
-    ./download_models.py --filepath ./karras2018iclr-celebahq-1024x1024.pkl --google_file_id 188K19ucknC6wg1R6jbuPEhTq9zoufOx4 && \
-    chmod +x import_example.py && \
-    python3 import_example.py
+ARG git_owner
+ARG git_repo
+ARG git_branch
 
+ENV SINGNET_REPOS=/opt/singnet
+ENV PROJECT_ROOT=${SINGNET_REPOS}/${git_repo}
+ENV SERVICE_DIR=${PROJECT_ROOT}/service
+ENV PYTHONPATH=${SERVICE_DIR}
 
-RUN pip3 install https://download.pytorch.org/whl/cu100/torch-1.1.0-cp35-cp35m-linux_x86_64.whl && \
-    pip3 install torchvision && \
-    cd ~ && \
-    git clone https://github.com/ToniCreswell/InvertingGAN.git && \
-    wget https://raw.githubusercontent.com/ToniCreswell/attribute-cVAEGAN/master/notebooks/DataToTensorCelebA_smileLabel.ipynb && \
-    # INSTALL SCIKIT-IMAGE
-    # REMOVE NOTEBOOKS
-    # PUT GOOGLE DRIVE DOWNLOADING SCRIPT INSIDE THIS REPO
+## Installing common dependencies and python3-pip
+RUN apt-get update && \
+    apt-get install -y wget curl nano git python3-dev python3-pip && \
+    python3 -m pip install --upgrade pip && \
+    ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 && \
+    LD_LIBRARY_PATH=/usr/local/cuda/lib64/stubs/:$LD_LIBRARY_PATH && \
+    rm /usr/local/cuda/lib64/stubs/libcuda.so.1
+
+# Installing snet-daemon + dependencies
+RUN SNETD_VERSION=`curl -s https://api.github.com/repos/singnet/snet-daemon/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")'` && \
+    cd /tmp && \
+    wget https://github.com/singnet/snet-daemon/releases/download/${SNETD_VERSION}/snet-daemon-${SNETD_VERSION}-linux-amd64.tar.gz && \
+    tar -xvf snet-daemon-${SNETD_VERSION}-linux-amd64.tar.gz && \
+    mv snet-daemon-${SNETD_VERSION}-linux-amd64/snetd /usr/bin/snetd
+
+# Installing Git LFS so that the model is downloaded properly
+RUN cd /opt && \
+    wget https://github.com/git-lfs/git-lfs/releases/download/v2.7.2/git-lfs-linux-amd64-v2.7.2.tar.gz && \
+    mkdir git-lfs && \
+    mv ./git-lfs-linux-amd64-v2.7.2.tar.gz git-lfs/ && \
+    cd git-lfs && \
+    tar -xvzf git-lfs-linux-amd64-v2.7.2.tar.gz && \
+    ./install.sh && \
+    git lfs install
+
+# Cloning service repository and downloading models
+RUN mkdir -p ${SINGNET_REPOS} && \
+    cd ${SINGNET_REPOS} &&\
+    git clone -b ${git_branch} https://github.com/${git_owner}/${git_repo}.git &&\
+    cd ${PROJECT_ROOT} &&\
+    python3 -m pip install -r requirements.txt &&\
+    sh buildproto.sh
+
+RUN cd ${SERVICE_DIR} &&\
+#    export PYTHONPATH=${SERVICE_DIR} &&\
+    export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:/usr/local/cuda-9.0/lib64:${LD_LIBRARY_PATH}" &&\
+    chmod +x import_example.py
+#    python3 import_example.py
+
+WORKDIR ${PROJECT_ROOT}

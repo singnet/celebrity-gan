@@ -1,0 +1,18 @@
+# Apple and windows thumbnails
+.DS_Store
+.DS_Store?
+Thumbs.db
+
+# Many other OS generated files
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Added for SingularityNET service integration
+.ipynb_checkpoints/
+*.db
+.idea/
+service/__pycache__/
+service/service_spec/__pycache__/
+service_metadata.json
