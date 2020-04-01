@@ -37,6 +37,7 @@ class GenerateCelebrityServicer(grpc_bt_grpc.GenerateCelebrityServicer):
         if request:  # If correctly received a non-empty request
             if request.seed == 0:
                 random_seed = np.random.randint(low=0, high=4294967295)
+                # Triggering CI build
             else:
                 random_seed = request.seed
             with Pool(1) as p:
